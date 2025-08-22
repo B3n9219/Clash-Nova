@@ -1,5 +1,9 @@
-import {useEffect, useState} from "react";
+import {useEffect, useState, useRef} from "react";
 import SortButton from "../SortButton/SortButton.jsx";
+import FilterButton from "../FilterButton/FilterButton.jsx";
+import FilterModal from "../FilterModal/FilterModal.jsx";
+import { getUniqueValues } from "../../utilities/filtering.js";
+
 
 const columns = [
     {label: "General Info", children: [
@@ -32,6 +36,15 @@ const columns = [
 function SummaryTable({ data }) {
     const [displayData, setDisplayData] = useState(data)
     const [sortConfig, setSortConfig] = useState({key: null, parentKey: null, direction: null})
+    // const [activeFilter, setActiveFilter] = useState(null); // stores { key, parentKey, options }
+    const [openFilter, setOpenFilter] = useState(null)
+    const [activeFilters, setActiveFilters] = useState({})
+    console.log("activeFilters:", activeFilters);
+
+    function getValue(item, key, parentKey = null) {
+        return parentKey ? item[parentKey]?.[key] : item[key];
+    }
+
     useEffect(() => {
         if (!sortConfig.key || !sortConfig.direction) {
             setDisplayData(data)
@@ -48,36 +61,75 @@ function SummaryTable({ data }) {
         })]
         setDisplayData(sorted)
     }, [sortConfig])
+    useEffect(() => {
+        let filtered = data
+        Object.entries(activeFilters).forEach(([filterKey, filter]) => {
+            console.log("filterKey", filterKey, "filter", filter)
+            const selectedOptions = Object.entries(filter.options)
+                .filter(([option, isSelected]) => isSelected? option: null)
+                .map(([option]) => option)
+            console.log("SELECTED", selectedOptions)
+            filtered = filtered.filter(row => {
+                const value = row[filterKey]
+                return selectedOptions.includes(value)
+            })
+        })
+        setDisplayData(filtered)
+        }, [activeFilters])
     return (
-        <table>
-            <thead>
-                <tr>
-                    {columns.map(column => (
-                        <th key={column.label} colSpan={column.children.length}>{column.label}</th>
-                    ))}
-                </tr>
-                <tr>{columns.map(parentColumn => (
-                    parentColumn.children.map(column => (
-                        <th key={`${parentColumn.label}-${column.key}`}>
-                            {column.label}{column.sortable &&
-                            <SortButton columnKey={column.key} parentKey={column.parentKey || null} config={sortConfig}
-                                         setConfig={setSortConfig}/>}
-                        </th>
-                    ))
-                ))}</tr>
-            </thead>
-            <tbody>
-                {displayData.map(row => (
-                    <tr key={row.tag}>
-                        {columns.map(parentColumn => (
-                        parentColumn.children.map(column => (
-                            <td key={`${parentColumn.label}-${column.key}-${row.tag}`}>{column.parentKey? row[column.parentKey][column.key] : row[column.key]}</td>
-                        ))
+        <>
+            <table>
+                <thead>
+                    <tr>
+                        {columns.map(column => (
+                            <th key={column.label} colSpan={column.children.length}>{column.label}</th>
                         ))}
                     </tr>
-                ))}
-            </tbody>
-        </table>
+                    <tr>{columns.map(parentColumn => (
+                        parentColumn.children.map(column => (
+                            <th key={`${parentColumn.label}-${column.key}`}>
+                                {column.label}{column.sortable &&
+                                <SortButton columnKey={column.key} parentKey={column.parentKey || null} config={sortConfig}
+                                             setConfig={setSortConfig}/>}
+                                {column.filterable &&
+                                <FilterButton handleClick={() => {
+                                    const filterKey = column.parentKey ? `${column.parentKey}-${column.key}` : column.key;
+                                    // Ensure the filter exists in activeFilters
+                                    if (!activeFilters[filterKey]) {
+                                        const optionsArr = [...new Set(displayData.map(row => getValue(row, column.key, column.parentKey)))];
+                                        const options = {};
+                                        optionsArr.forEach(option => options[option] = false);
+                                        setActiveFilters(prev => ({ ...prev, [filterKey]: { options } }));
+                                    }
+                                    setOpenFilter(filterKey); // only store the filterKey
+                                }}/>
+                                }
+                            </th>
+                        ))
+                    ))}</tr>
+                </thead>
+                <tbody>
+                    {displayData.map(row => (
+                        <tr key={row.tag}>
+                            {columns.map(parentColumn => (
+                            parentColumn.children.map(column => (
+                                <td key={`${parentColumn.label}-${column.key}-${row.tag}`}>{column.parentKey? row[column.parentKey][column.key] : row[column.key]}</td>
+                            ))
+                            ))}
+                        </tr>
+                    ))}
+                </tbody>
+            </table>
+            {openFilter && (
+                <FilterModal
+                    is_open={!!openFilter}
+                    options={activeFilters[openFilter]?.options || {}}
+                    setFilters={setActiveFilters}
+                    filterKey={openFilter}
+                    onClose={() => setOpenFilter(null)}
+                />
+            )}
+        </>
     )
 }
 
