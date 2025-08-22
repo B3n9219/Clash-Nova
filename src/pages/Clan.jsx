@@ -3,6 +3,8 @@ import {useEffect, useState} from "react";
 
 import { getClanSummaryInfo } from "../api/main.js";
 
+import SummaryTable from "../components/SummaryTable/SummaryTable.jsx";
+
 function Clan() {
     const { tag } = useParams();
     const [clanData, setClanData] = useState({
@@ -30,7 +32,7 @@ function Clan() {
     return (
         <>
             <p>Clan tag: {tag}</p>
-            <p>{clanData}</p>
+            <SummaryTable data={clanData.summary}/>
         </>
     )
 }
