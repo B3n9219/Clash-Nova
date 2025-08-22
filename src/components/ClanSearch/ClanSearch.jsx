@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { useNavigate } from "react-router-dom";
 
-import { removeHashFromTag } from "../utilities/formatting.js";
+import { removeHashFromTag } from "../../utilities/formatting.js";
 
 
 function ClanSearch() {

@@ -1,4 +1,4 @@
-import ClanSearch from "../components/ClanSearch.jsx";
+import ClanSearch from "../components/ClanSearch/ClanSearch.jsx";
 
 
 function Home() {
