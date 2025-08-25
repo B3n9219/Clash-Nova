@@ -1,6 +1,6 @@
 // Using this url for testing - use VM when in production
 // const baseRequest = "http://127.0.0.1:8000"
-const baseRequest = "http://34.83.86.193:8000"
+const baseRequest = "/api"
 
 async function getInfo(url) {
     const response = await fetch(url)
