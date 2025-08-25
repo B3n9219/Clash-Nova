@@ -1,15 +1,9 @@
-import { useParams } from "react-router-dom";
+import {Link, useParams} from "react-router-dom";
 import {useEffect, useState} from "react";
 
-import {getClanSummaryInfo, getClanWarInfo} from "../api/main.js";
-import { getUniqueDates } from "../utilities/filtering.js";
+import { getClanSummaryInfo, getClanWarInfo } from "../api/main.js";
 
-import Table from "../components/SummaryTable/Table.jsx";
-
-import summaryColumns from "../columns/summaryTable.js"
-import getWarColumns from "../columns/warTable.js"
-
-
+import { Outlet } from "react-router-dom";
 
 
 function Clan() {
@@ -41,8 +35,9 @@ function Clan() {
     return (
         <>
             <p>Clan tag: {tag}</p>
-            <Table data={clanData.summary} columns={summaryColumns}/>
-            <Table data={clanData.war} columns={getWarColumns(getUniqueDates(clanData.war))}/>
+            <Link to=".">Summary</Link>
+            <Link to="wars">Wars</Link>
+            <Outlet context={{clanData}}/>
         </>
     )
 }

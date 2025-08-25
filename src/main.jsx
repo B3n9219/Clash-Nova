@@ -6,6 +6,9 @@ import App from './App.jsx'
 import Home from "./pages/Home.jsx";
 import Clan from "./pages/Clan.jsx"
 
+import Summary from "./pages/Summary.jsx";
+import Wars from "./pages/Wars.jsx";
+
 // font awesome setup
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { library } from '@fortawesome/fontawesome-svg-core'
@@ -29,7 +32,17 @@ const router = createBrowserRouter([
             },
             {
                 path: "clans/:tag",
-                element: <Clan />
+                element: <Clan />,
+                children: [
+                    {
+                        index: true,
+                        element: <Summary />
+                    },
+                    {
+                        path: "wars",
+                        element: <Wars />,
+                    },
+                ]
             }
         ]
     }
