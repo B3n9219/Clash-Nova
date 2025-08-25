@@ -1,8 +1,12 @@
-import {forwardRef, useEffect, useRef} from "react";
+import { useEffect, useRef, useState } from "react";
 
-function FilterModal({is_open, options, setFilters, filterId, onClose}) {
+function FilterModal({is_open, options, setOptions, filterId, onClose}) {
     const ref = useRef(null)
-    console.log("FilterModal options:", options);
+    const [currentOptions, setCurrentOptions] = useState(options)
+    console.log("FilterModal options:", currentOptions, options);
+    useEffect(() => {
+        setCurrentOptions(options);
+    }, [options]);
     useEffect(() => {
         if (is_open) {
             ref.current.showModal()
@@ -12,26 +16,20 @@ function FilterModal({is_open, options, setFilters, filterId, onClose}) {
     }, [is_open])
     function handleChange(e) {
         const { name, checked } = e.target;
-        setFilters((prev) => ({
-            ...prev,
-            [filterId]: {
-                ...prev[filterId],
-                options: {
-                    ...(prev[filterId]?.options || {}),
-                    [name]: checked,
-                },
-            },
-        }));
+        setCurrentOptions({
+            ...currentOptions, [name]: checked
+        });
     }
 
     function handleSubmit(e) {
         e.preventDefault()
+        setOptions(currentOptions)
         onClose()
     }
     return (
         <dialog ref={ref}>
-            <form method="dialog" onSubmit={handleSubmit}>
-                {Object.entries(options).map(([option, isChecked]) => (
+            <form onSubmit={handleSubmit}>
+                {Object.entries(currentOptions).map(([option, isChecked]) => (
                     <div key={option}>
                         <input
                             id={option}

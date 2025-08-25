@@ -59,37 +59,40 @@ function SummaryTable({ data }) {
     }
 
     useEffect(() => {
-        if (!sortConfig.key || !sortConfig.direction) {
-            setDisplayData(data)
-            return
-        }
-        const sorted = [...data.sort((a, b) => {
-            const aVal = getValue(a, sortConfig.key, sortConfig.parentKey);
-            const bVal = getValue(b, sortConfig.key, sortConfig.parentKey);
-            if (typeof aVal === 'number' && typeof bVal === 'number') {
-                return sortConfig.direction === "asc"? aVal - bVal: bVal - aVal
-            }
-            return sortConfig.direction === "asc"
-            ? String(aVal).localeCompare(String(bVal))
-            : String(bVal).localeCompare(String(aVal))
-        })]
-        setDisplayData(sorted)
-    }, [sortConfig])
-    useEffect(() => {
-        let filtered = data
+        let processed = [...data];
+
+        // 1. Apply filters
         Object.entries(activeFilters).forEach(([filterId, filter]) => {
-            console.log("filterId", filterId, "filter", filter)
             const selectedOptions = Object.entries(filter.options)
-                .filter(([option, isSelected]) => isSelected? option: null)
-                .map(([option]) => option)
-            console.log("SELECTED", selectedOptions)
-            filtered = filtered.filter(row => {
-                const value = getValue(row, filter.key, filter.parentKey)
-                return selectedOptions.includes(value)
-            })
-        })
-        setDisplayData(filtered)
-        }, [activeFilters])
+                .filter(([_, isSelected]) => isSelected)
+                .map(([option]) => option);
+
+            if (selectedOptions.length > 0) {
+                processed = processed.filter(row => {
+                    const value = getValue(row, filter.key, filter.parentKey);
+                    return selectedOptions.includes(value);
+                });
+            }
+        });
+
+        // 2. Apply sorting
+        if (sortConfig?.key && sortConfig?.direction) {
+            processed.sort((a, b) => {
+                const aVal = getValue(a, sortConfig.key, sortConfig.parentKey);
+                const bVal = getValue(b, sortConfig.key, sortConfig.parentKey);
+
+                if (typeof aVal === "number" && typeof bVal === "number") {
+                    return sortConfig.direction === "asc" ? aVal - bVal : bVal - aVal;
+                }
+                return sortConfig.direction === "asc"
+                    ? String(aVal).localeCompare(String(bVal))
+                    : String(bVal).localeCompare(String(aVal));
+            });
+        }
+
+        // 3. Push to state
+        setDisplayData(processed);
+    }, [data, activeFilters, sortConfig]);
     return (
         <>
             <table>
@@ -138,8 +141,11 @@ function SummaryTable({ data }) {
                 <FilterModal
                     is_open={!!openFilter}
                     options={activeFilters[openFilter]?.options || {}}
-                    setFilters={setActiveFilters}
-                    filterId={openFilter}
+                    setOptions={(newOptions) => (
+                        setActiveFilters((prev) => (
+                            {...prev, [openFilter]:  {...prev[openFilter], options: newOptions}}
+                        )
+                    ))}
                     onClose={() => setOpenFilter(null)}
                 />
             )}
