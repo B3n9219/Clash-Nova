@@ -1,6 +1,6 @@
 import {forwardRef, useEffect, useRef} from "react";
 
-function FilterModal({is_open, options, setFilters, filterKey, onClose}) {
+function FilterModal({is_open, options, setFilters, filterId, onClose}) {
     const ref = useRef(null)
     console.log("FilterModal options:", options);
     useEffect(() => {
@@ -12,19 +12,16 @@ function FilterModal({is_open, options, setFilters, filterKey, onClose}) {
     }, [is_open])
     function handleChange(e) {
         const { name, checked } = e.target;
-        setFilters((prev) => {
-            console.log("Prev filters:", prev);
-            return {
-                ...prev,
-                [filterKey]: {
-                    ...prev[filterKey],
-                    options: {
-                        ...(prev[filterKey]?.options || {}),
-                        [name]: checked,
-                    },
+        setFilters((prev) => ({
+            ...prev,
+            [filterId]: {
+                ...prev[filterId],
+                options: {
+                    ...(prev[filterId]?.options || {}),
+                    [name]: checked,
                 },
-            };
-        });
+            },
+        }));
     }
 
     function handleSubmit(e) {

@@ -5,32 +5,45 @@ import FilterModal from "../FilterModal/FilterModal.jsx";
 import { getUniqueValues } from "../../utilities/filtering.js";
 
 
-const columns = [
-    {label: "General Info", children: [
-            {key: "name", label: "Name", sortable: true, filterable: false},
-            {key: "town_hall", label: "Town Hall", sortable: true, filterable: true},
-            {key: "role", label: "Role", sortable: false, filterable: true},
-            {key: "war_opted_in", label: "Wars?", sortable: false, filterable: true},
-            {key: "average_donations", label: "Donations", sortable: true, filterable: false},
+function generateColumnId(key, parentKey) {
+    return parentKey ? `${parentKey}-${key}` : key;
+}
+
+const rawColumns = [
+    { label: "General Info", children: [
+            { key: "name", label: "Name", sortable: true, filterable: false },
+            { key: "town_hall", label: "Town Hall", sortable: true, filterable: true },
+            { key: "role", label: "Role", sortable: false, filterable: true },
+            { key: "war_opted_in", label: "Wars?", sortable: false, filterable: true },
+            { key: "average_donations", label: "Donations", sortable: true, filterable: false },
         ]},
-    {label: "Clan Games", children: [
-            {key: "average_medals", label: "Medals", sortable: true, filterable: false},
+    { label: "Clan Games", children: [
+            { key: "average_medals", label: "Medals", sortable: true, filterable: false },
         ]},
-    {label: "War", children: [
-            {key: "attacks", parentKey: "war_stats", label: "Attacks", sortable: true, filterable: false},
-            {key: "stars", parentKey: "war_stats", label: "Stars", sortable: true, filterable: false},
-            {key: "destruction", parentKey: "war_stats", label: "Destruction", sortable: true, filterable: false},
+    { label: "War", children: [
+            { key: "attacks", parentKey: "war_stats", label: "Attacks", sortable: true, filterable: false },
+            { key: "stars", parentKey: "war_stats", label: "Stars", sortable: true, filterable: false },
+            { key: "destruction", parentKey: "war_stats", label: "Destruction", sortable: true, filterable: false },
         ]},
-    {label: "Clan War League", children: [
-            {key: "attacks", parentKey: "cwl_stats", label: "Attacks", sortable: true, filterable: false},
-            {key: "stars", parentKey: "cwl_stats", label: "Stars", sortable: true, filterable: false},
-            {key: "destruction", parentKey: "cwl_stats", label: "Destruction", sortable: true, filterable: false},
+    { label: "Clan War League", children: [
+            { key: "attacks", parentKey: "cwl_stats", label: "Attacks", sortable: true, filterable: false },
+            { key: "stars", parentKey: "cwl_stats", label: "Stars", sortable: true, filterable: false },
+            { key: "destruction", parentKey: "cwl_stats", label: "Destruction", sortable: true, filterable: false },
         ]},
-    {label: "Raid Weekend", children: [
-            {key: "attacks", parentKey: "raid_stats", label: "Attacks", sortable: true, filterable: false},
-            {key: "gold_looted", parentKey: "raid_stats", label: "Gold Looted", sortable: true, filterable: false}
+    { label: "Raid Weekend", children: [
+            { key: "attacks", parentKey: "raid_stats", label: "Attacks", sortable: true, filterable: false },
+            { key: "gold_looted", parentKey: "raid_stats", label: "Gold Looted", sortable: true, filterable: false }
         ]}
-]
+];
+
+// add IDs dynamically
+const columns = rawColumns.map(group => ({
+    ...group,
+    children: group.children.map(col => ({
+        ...col,
+        id: generateColumnId(col.key, col.parentKey)
+    }))
+}));
 
 
 function SummaryTable({ data }) {
@@ -51,26 +64,27 @@ function SummaryTable({ data }) {
             return
         }
         const sorted = [...data.sort((a, b) => {
-            const aVal = sortConfig.parentKey ? a[sortConfig.parentKey][sortConfig.key] : a[sortConfig.key];
-            const bVal = sortConfig.parentKey ? b[sortConfig.parentKey][sortConfig.key] : b[sortConfig.key];
+            const aVal = getValue(a, sortConfig.key, sortConfig.parentKey);
+            const bVal = getValue(b, sortConfig.key, sortConfig.parentKey);
             if (typeof aVal === 'number' && typeof bVal === 'number') {
                 return sortConfig.direction === "asc"? aVal - bVal: bVal - aVal
             }
             return sortConfig.direction === "asc"
-            ? String(aVal).localeCompare(String(bVal)) : String(bVal).localeCompare(String(aVal))
+            ? String(aVal).localeCompare(String(bVal))
+            : String(bVal).localeCompare(String(aVal))
         })]
         setDisplayData(sorted)
     }, [sortConfig])
     useEffect(() => {
         let filtered = data
-        Object.entries(activeFilters).forEach(([filterKey, filter]) => {
-            console.log("filterKey", filterKey, "filter", filter)
+        Object.entries(activeFilters).forEach(([filterId, filter]) => {
+            console.log("filterId", filterId, "filter", filter)
             const selectedOptions = Object.entries(filter.options)
                 .filter(([option, isSelected]) => isSelected? option: null)
                 .map(([option]) => option)
             console.log("SELECTED", selectedOptions)
             filtered = filtered.filter(row => {
-                const value = row[filterKey]
+                const value = getValue(row, filter.key, filter.parentKey)
                 return selectedOptions.includes(value)
             })
         })
@@ -87,7 +101,7 @@ function SummaryTable({ data }) {
                     </tr>
                     <tr>{columns.map(parentColumn => (
                         parentColumn.children.map(column => (
-                            <th key={`${parentColumn.label}-${column.key}`}>
+                            <th key={column.id}>
                                 {column.label}{column.sortable &&
                                 <SortButton columnKey={column.key} parentKey={column.parentKey || null} config={sortConfig}
                                              setConfig={setSortConfig}/>}
@@ -99,9 +113,9 @@ function SummaryTable({ data }) {
                                         const optionsArr = [...new Set(displayData.map(row => getValue(row, column.key, column.parentKey)))];
                                         const options = {};
                                         optionsArr.forEach(option => options[option] = false);
-                                        setActiveFilters(prev => ({ ...prev, [filterKey]: { options } }));
+                                        setActiveFilters(prev => ({ ...prev, [column.id]: {options, key: column.key, parentKey: column.parentKey || null }}));
                                     }
-                                    setOpenFilter(filterKey); // only store the filterKey
+                                    setOpenFilter(column.id); // only store the filterKey
                                 }}/>
                                 }
                             </th>
@@ -113,7 +127,7 @@ function SummaryTable({ data }) {
                         <tr key={row.tag}>
                             {columns.map(parentColumn => (
                             parentColumn.children.map(column => (
-                                <td key={`${parentColumn.label}-${column.key}-${row.tag}`}>{column.parentKey? row[column.parentKey][column.key] : row[column.key]}</td>
+                                <td key={`${column.id}-${row.tag}`}>{getValue(row, column.key, column.parentKey)}</td>
                             ))
                             ))}
                         </tr>
@@ -125,7 +139,7 @@ function SummaryTable({ data }) {
                     is_open={!!openFilter}
                     options={activeFilters[openFilter]?.options || {}}
                     setFilters={setActiveFilters}
-                    filterKey={openFilter}
+                    filterId={openFilter}
                     onClose={() => setOpenFilter(null)}
                 />
             )}
