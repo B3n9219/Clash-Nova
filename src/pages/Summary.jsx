@@ -1,6 +1,6 @@
 import summaryColumns from "../columns/summaryTable.js"
 
-import Table from "../components/SummaryTable/Table.jsx";
+import Table from "../components/Table/Table.jsx";
 
 import { useOutletContext } from "react-router-dom";
 

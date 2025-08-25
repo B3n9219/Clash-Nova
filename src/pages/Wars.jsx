@@ -1,4 +1,4 @@
-import Table from "../components/SummaryTable/Table.jsx";
+import Table from "../components/Table/Table.jsx";
 import getWarColumns from "../columns/warTable.js";
 import { getUniqueDates } from "../utilities/filtering.js";
 

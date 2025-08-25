@@ -5,6 +5,7 @@
     --background: #121212;
     --text: #FFFFFF;
     color: var(--text);
+    background-color: var(--background);
 }
 
 * {

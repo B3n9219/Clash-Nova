@@ -33,12 +33,12 @@ function Clan() {
     if (loading) return <p>Loading...</p>
     if (error) return <p>{error}</p>
     return (
-        <>
+        <div>
             <p>Clan tag: {tag}</p>
             <Link to=".">Summary</Link>
             <Link to="wars">Wars</Link>
             <Outlet context={{clanData}}/>
-        </>
+        </div>
     )
 }
 
