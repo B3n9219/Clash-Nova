@@ -16,7 +16,7 @@ function SortButton({columnKey, parentKey, config, setConfig}) {
         }
     }
     return (
-        <button onClick={handleClick}>
+        <button onClick={handleClick} className={"table-button"}>
             <SortIcon
                 direction={
                 columnKey === config.key && parentKey === config.parentKey

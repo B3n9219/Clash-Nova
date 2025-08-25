@@ -16,6 +16,16 @@ function Table({ data, columns }) {
         return parentKey ? item[parentKey]?.[key] : item[key];
     }
 
+    function hasActiveFilters(columnId) {
+        const options = activeFilters[columnId]?.options || {};
+        for (let value of Object.values(options)) {
+            if (value) {
+                return true
+            }
+        }
+        return false
+    }
+
     useEffect(() => {
         let processed = [...data];
 
@@ -68,7 +78,7 @@ function Table({ data, columns }) {
                                 <SortButton columnKey={column.key} parentKey={column.parentKey || null} config={sortConfig}
                                              setConfig={setSortConfig}/>}
                                 {column.filterable &&
-                                <FilterButton handleClick={() => {
+                                <FilterButton active={hasActiveFilters(column.id)} handleClick={() => {
                                     // Ensure the column id in activeFilters
                                     if (!activeFilters[column.id]) {
                                         const optionsArr = [...new Set(displayData.map(row => getValue(row, column.key, column.parentKey)))];

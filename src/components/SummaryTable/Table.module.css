@@ -10,7 +10,7 @@
     font-size: 0.9rem;
     /* change min-width */
     min-width: 400px;
-    border-radius: 5px 5px 0 0;
+    /*border-radius: 10px 10px 0 0;*/
     overflow: hidden;
     box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
     background-color: var(--table-bg);
@@ -20,14 +20,23 @@
     background-color: var(--primary);
     color: var(--text);
     text-align: center;
-    font-weight: bold;
 }
 
+.table thead tr:first-child th {
+    font-weight: bold;
+    border-radius: 15px 15px 0 0;
+}
+
+
 .table thead tr:last-child {
-    background-color: #4B2FA1;
+    background-color: #2E0F6C;
     color: var(--text);
     text-align: left;
-    border-bottom: 2px solid var(--primary); /* subtle separation */
+    border-bottom: 2px solid var(--primary);
+}
+
+.table thead tr:last-child th {
+    font-weight: normal;
 }
 
 .table th, .table td {
