@@ -1,58 +1,17 @@
-import {useEffect, useState, useRef} from "react";
+import {useEffect, useState} from "react";
 import SortButton from "../SortButton/SortButton.jsx";
 import FilterButton from "../FilterButton/FilterButton.jsx";
 import FilterModal from "../FilterModal/FilterModal.jsx";
-import { getUniqueValues } from "../../utilities/filtering.js";
 
+import columns from "../../columns/summaryTable.js"
 
-function generateColumnId(key, parentKey) {
-    return parentKey ? `${parentKey}-${key}` : key;
-}
-
-const rawColumns = [
-    { label: "General Info", children: [
-            { key: "name", label: "Name", sortable: true, filterable: false },
-            { key: "town_hall", label: "Town Hall", sortable: true, filterable: true },
-            { key: "role", label: "Role", sortable: false, filterable: true },
-            { key: "war_opted_in", label: "Wars?", sortable: false, filterable: true },
-            { key: "average_donations", label: "Donations", sortable: true, filterable: false },
-        ]},
-    { label: "Clan Games", children: [
-            { key: "average_medals", label: "Medals", sortable: true, filterable: false },
-        ]},
-    { label: "War", children: [
-            { key: "attacks", parentKey: "war_stats", label: "Attacks", sortable: true, filterable: false },
-            { key: "stars", parentKey: "war_stats", label: "Stars", sortable: true, filterable: false },
-            { key: "destruction", parentKey: "war_stats", label: "Destruction", sortable: true, filterable: false },
-        ]},
-    { label: "Clan War League", children: [
-            { key: "attacks", parentKey: "cwl_stats", label: "Attacks", sortable: true, filterable: false },
-            { key: "stars", parentKey: "cwl_stats", label: "Stars", sortable: true, filterable: false },
-            { key: "destruction", parentKey: "cwl_stats", label: "Destruction", sortable: true, filterable: false },
-        ]},
-    { label: "Raid Weekend", children: [
-            { key: "attacks", parentKey: "raid_stats", label: "Attacks", sortable: true, filterable: false },
-            { key: "gold_looted", parentKey: "raid_stats", label: "Gold Looted", sortable: true, filterable: false }
-        ]}
-];
-
-// add IDs dynamically
-const columns = rawColumns.map(group => ({
-    ...group,
-    children: group.children.map(col => ({
-        ...col,
-        id: generateColumnId(col.key, col.parentKey)
-    }))
-}));
-
+console.log("COLUMNS", columns)
 
 function SummaryTable({ data }) {
     const [displayData, setDisplayData] = useState(data)
     const [sortConfig, setSortConfig] = useState({key: null, parentKey: null, direction: null})
-    // const [activeFilter, setActiveFilter] = useState(null); // stores { key, parentKey, options }
     const [openFilter, setOpenFilter] = useState(null)
     const [activeFilters, setActiveFilters] = useState({})
-    console.log("activeFilters:", activeFilters);
 
     function getValue(item, key, parentKey = null) {
         return parentKey ? item[parentKey]?.[key] : item[key];
@@ -62,7 +21,7 @@ function SummaryTable({ data }) {
         let processed = [...data];
 
         // 1. Apply filters
-        Object.entries(activeFilters).forEach(([filterId, filter]) => {
+        Object.values(activeFilters).forEach(filter => {
             const selectedOptions = Object.entries(filter.options)
                 .filter(([_, isSelected]) => isSelected)
                 .map(([option]) => option);
@@ -70,7 +29,8 @@ function SummaryTable({ data }) {
             if (selectedOptions.length > 0) {
                 processed = processed.filter(row => {
                     const value = getValue(row, filter.key, filter.parentKey);
-                    return selectedOptions.includes(value);
+                    // Convert value into string, as numeric options are strings.
+                    return selectedOptions.includes(String(value));
                 });
             }
         });
@@ -110,15 +70,14 @@ function SummaryTable({ data }) {
                                              setConfig={setSortConfig}/>}
                                 {column.filterable &&
                                 <FilterButton handleClick={() => {
-                                    const filterKey = column.parentKey ? `${column.parentKey}-${column.key}` : column.key;
-                                    // Ensure the filter exists in activeFilters
-                                    if (!activeFilters[filterKey]) {
+                                    // Ensure the column id in activeFilters
+                                    if (!activeFilters[column.id]) {
                                         const optionsArr = [...new Set(displayData.map(row => getValue(row, column.key, column.parentKey)))];
                                         const options = {};
                                         optionsArr.forEach(option => options[option] = false);
                                         setActiveFilters(prev => ({ ...prev, [column.id]: {options, key: column.key, parentKey: column.parentKey || null }}));
                                     }
-                                    setOpenFilter(column.id); // only store the filterKey
+                                    setOpenFilter(column.id);
                                 }}/>
                                 }
                             </th>

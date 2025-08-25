@@ -1,9 +1,10 @@
 import { useEffect, useRef, useState } from "react";
+import PropTypes from 'prop-types';
 
-function FilterModal({is_open, options, setOptions, filterId, onClose}) {
+
+function FilterModal({is_open, options, setOptions, onClose}) {
     const ref = useRef(null)
     const [currentOptions, setCurrentOptions] = useState(options)
-    console.log("FilterModal options:", currentOptions, options);
     useEffect(() => {
         setCurrentOptions(options);
     }, [options]);
@@ -20,7 +21,6 @@ function FilterModal({is_open, options, setOptions, filterId, onClose}) {
             ...currentOptions, [name]: checked
         });
     }
-
     function handleSubmit(e) {
         e.preventDefault()
         setOptions(currentOptions)
@@ -45,6 +45,14 @@ function FilterModal({is_open, options, setOptions, filterId, onClose}) {
             </form>
         </dialog>
     );
+}
+
+
+FilterModal.propTypes = {
+    is_open: PropTypes.bool,
+    options: PropTypes.objectOf(PropTypes.bool),
+    setOptions: PropTypes.func,
+    onClose: PropTypes.func,
 }
 
 export default FilterModal

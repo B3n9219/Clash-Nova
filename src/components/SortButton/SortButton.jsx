@@ -1,5 +1,3 @@
-import {useState} from "react";
-
 function SortButton({columnKey, parentKey, config, setConfig}) {
     function handleClick() {
         if (columnKey === config.key && parentKey === config.parentKey) {
