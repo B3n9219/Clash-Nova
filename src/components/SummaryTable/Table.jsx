@@ -3,11 +3,8 @@ import SortButton from "../SortButton/SortButton.jsx";
 import FilterButton from "../FilterButton/FilterButton.jsx";
 import FilterModal from "../FilterModal/FilterModal.jsx";
 
-import columns from "../../columns/summaryTable.js"
 
-console.log("COLUMNS", columns)
-
-function SummaryTable({ data }) {
+function Table({ data, columns }) {
     const [displayData, setDisplayData] = useState(data)
     const [sortConfig, setSortConfig] = useState({key: null, parentKey: null, direction: null})
     const [openFilter, setOpenFilter] = useState(null)
@@ -112,4 +109,4 @@ function SummaryTable({ data }) {
     )
 }
 
-export default SummaryTable
+export default Table
