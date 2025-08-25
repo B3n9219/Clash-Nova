@@ -3,6 +3,8 @@ import SortButton from "../SortButton/SortButton.jsx";
 import FilterButton from "../FilterButton/FilterButton.jsx";
 import FilterModal from "../FilterModal/FilterModal.jsx";
 
+import styles from "./Table.module.css"
+
 
 function Table({ data, columns }) {
     const [displayData, setDisplayData] = useState(data)
@@ -52,7 +54,7 @@ function Table({ data, columns }) {
     }, [data, activeFilters, sortConfig]);
     return (
         <>
-            <table>
+            <table className={styles.table} >
                 <thead>
                     <tr>
                         {columns.map(column => (

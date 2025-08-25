@@ -1,6 +1,11 @@
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+
+
 function FilterButton({ handleClick }) {
     return (
-        <button onClick={handleClick}>Filter</button>
+        <>
+            <button onClick={handleClick}><FontAwesomeIcon icon="fa-solid fa-filter" /></button>
+        </>
     )
 }
 

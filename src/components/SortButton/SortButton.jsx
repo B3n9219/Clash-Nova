@@ -1,3 +1,8 @@
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import SortIcon from "../SortIcon/SortIcon.jsx";
+
+
+
 function SortButton({columnKey, parentKey, config, setConfig}) {
     function handleClick() {
         if (columnKey === config.key && parentKey === config.parentKey) {
@@ -12,7 +17,13 @@ function SortButton({columnKey, parentKey, config, setConfig}) {
     }
     return (
         <button onClick={handleClick}>
-            {columnKey===config.key && parentKey === config.parentKey? <p>{config.direction}</p> : <p>None</p>}
+            <SortIcon
+                direction={
+                columnKey === config.key && parentKey === config.parentKey
+                    ? config.direction
+                    : null
+                }
+            />
         </button>
     )
 }
