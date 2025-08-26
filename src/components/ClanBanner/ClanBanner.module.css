@@ -1,0 +1,41 @@
+.banner {
+    display: flex;
+    border: 2px solid var(--primary);
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.20);
+    border-radius: 16px;
+    width: 80%;
+    transition: box-shadow 0.3s;
+}
+
+.banner:hover {
+    box-shadow: 0 0 30px rgba(106, 63, 192, 0.7);
+}
+
+.banner .info {
+    display: flex;
+    flex-direction: column;
+}
+
+.banner .info .title {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.banner .info {
+    text-wrap: wrap;
+}
+
+.banner .players {
+    height: min-content;
+    padding: 3px 6px;
+    border-radius: 10px;
+    background-color: grey;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.banner .players > * {
+    margin: 0;
+}

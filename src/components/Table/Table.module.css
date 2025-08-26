@@ -10,7 +10,7 @@
     font-size: 0.9rem;
     /* change min-width */
     min-width: 400px;
-    box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.20);
     background-color: var(--table-bg);
 }
 

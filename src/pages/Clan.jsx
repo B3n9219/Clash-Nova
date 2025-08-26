@@ -1,8 +1,10 @@
 import {Link, useParams} from "react-router-dom";
 import {useEffect, useState} from "react";
 
-import { getClanBasicInfo, getClanSummaryInfo, getClanWarInfo } from "../api/main.js";
+import { getClanInfo, getClanSummaryInfo, getClanWarInfo } from "../api/main.js";
 import ClanBanner from "../components/ClanBanner/ClanBanner.jsx";
+
+import styles from "./Clan.module.css"
 
 import { Outlet } from "react-router-dom";
 
@@ -19,10 +21,10 @@ function Clan() {
     useEffect(() => {
         async function fetchClanData() {
             try {
-                const basicInfo = await getClanBasicInfo(tag)
+                const basicInfo = await getClanInfo(tag)
                 const summaryData = await getClanSummaryInfo(tag)
                 const warData = await getClanWarInfo(tag)
-                setClanData({ ...clanData, clan: basicInfo, summary: summaryData, war: warData });
+                setClanData({ ...clanData, clan: {...basicInfo, playerCount: summaryData.length}, summary: summaryData, war: warData });
                 setError(null)
             } catch (error) {
                 setError(error.message)
@@ -36,11 +38,13 @@ function Clan() {
     if (loading) return <p>Loading...</p>
     if (error) return <p>{error}</p>
     return (
-        <div>
+        <div className={styles.clan}>
             <ClanBanner info={clanData.clan}/>
             <Link to=".">Summary</Link>
             <Link to="wars">Wars</Link>
-            <Outlet context={{clanData}}/>
+            <div className={styles["table-wrapper"]}>
+                <Outlet context={{clanData}}/>
+            </div>
         </div>
     )
 }
