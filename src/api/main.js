@@ -11,6 +11,12 @@ async function getInfo(url) {
 }
 
 
+async function getClanBasicInfo(tag) {
+    const encodedTag = encodeURIComponent(tag);
+    return await getInfo(`${baseRequest}/clan/${encodedTag}/info`)
+}
+
+
 async function getClanSummaryInfo(tag) {
     const encodedTag = encodeURIComponent(tag);
     return await getInfo(`${baseRequest}/clan/${encodedTag}/players/summary`)
@@ -25,4 +31,4 @@ async function getClanWarInfo(tag) {
 
 // console.log(await getClanWarInfo('#28P220JCV'))
 
-export { getClanSummaryInfo, getClanWarInfo }
+export { getClanBasicInfo, getClanSummaryInfo, getClanWarInfo }

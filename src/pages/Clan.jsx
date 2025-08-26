@@ -1,7 +1,8 @@
 import {Link, useParams} from "react-router-dom";
 import {useEffect, useState} from "react";
 
-import { getClanSummaryInfo, getClanWarInfo } from "../api/main.js";
+import { getClanBasicInfo, getClanSummaryInfo, getClanWarInfo } from "../api/main.js";
+import ClanBanner from "../components/ClanBanner/ClanBanner.jsx";
 
 import { Outlet } from "react-router-dom";
 
@@ -9,6 +10,7 @@ import { Outlet } from "react-router-dom";
 function Clan() {
     const { tag } = useParams();
     const [clanData, setClanData] = useState({
+        clan: null,
         summary: null,
         war: null
     })
@@ -17,9 +19,10 @@ function Clan() {
     useEffect(() => {
         async function fetchClanData() {
             try {
+                const basicInfo = await getClanBasicInfo(tag)
                 const summaryData = await getClanSummaryInfo(tag)
                 const warData = await getClanWarInfo(tag)
-                setClanData({...clanData, summary: summaryData, war: warData})
+                setClanData({ ...clanData, clan: basicInfo, summary: summaryData, war: warData });
                 setError(null)
             } catch (error) {
                 setError(error.message)
@@ -29,12 +32,12 @@ function Clan() {
             }
         }
         fetchClanData()
-    }, [])
+    }, [tag])
     if (loading) return <p>Loading...</p>
     if (error) return <p>{error}</p>
     return (
         <div>
-            <p>Clan tag: {tag}</p>
+            <ClanBanner info={clanData.clan}/>
             <Link to=".">Summary</Link>
             <Link to="wars">Wars</Link>
             <Outlet context={{clanData}}/>
