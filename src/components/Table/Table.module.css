@@ -10,11 +10,22 @@
     font-size: 0.9rem;
     /* change min-width */
     min-width: 400px;
-    /*border-radius: 10px 10px 0 0;*/
-    overflow: hidden;
     box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
     background-color: var(--table-bg);
 }
+
+
+.table thead tr {
+    top: 0;
+    position: sticky;
+    z-index: 2;
+}
+
+
+.table thead tr:last-child {
+    top: 42px;
+}
+
 
 .table thead tr {
     background-color: var(--primary);
