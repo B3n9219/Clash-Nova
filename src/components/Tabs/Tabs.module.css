@@ -1,0 +1,33 @@
+.tabs {
+    display: flex;
+    border-bottom: 1px solid #2e2e3e; /* subtle divider */
+    background-color: #1e1e2f; /* consistent dark base */
+}
+
+.tab {
+    padding: 0.6rem 1.2rem;
+    cursor: pointer;
+    text-decoration: none;
+    color: #c0c8e0; /* soft cool text */
+    transition: background-color 0.3s ease, color 0.3s ease;
+    font-weight: 500;
+    background-color: transparent;
+}
+
+.tab:hover {
+    background-color: #2a2a3f; /* gentle hover tone */
+    color: #ffffff;
+}
+
+.tab.active {
+    color: #ffffff;
+    background-color: #35354a; /* muted steel blue */
+    font-weight: 600;
+    box-shadow: inset 0 -2px 0 #5c9eff; /* soft cyan underline effect */
+}
+
+.tab.active::after {
+    content: "";
+    position: absolute;
+    height: 0; /* remove second line */
+}

@@ -1,4 +1,4 @@
-import {Link, useParams} from "react-router-dom";
+import {Link, NavLink, useParams} from "react-router-dom";
 import {useEffect, useState} from "react";
 
 import { getClanInfo, getClanSummaryInfo, getClanWarInfo } from "../api/main.js";
@@ -7,6 +7,8 @@ import ClanBanner from "../components/ClanBanner/ClanBanner.jsx";
 import styles from "./Clan.module.css"
 
 import { Outlet } from "react-router-dom";
+
+import Tabs from "../components/Tabs/Tabs.jsx";
 
 
 function Clan() {
@@ -40,8 +42,13 @@ function Clan() {
     return (
         <div className={styles.clan}>
             <ClanBanner info={clanData.clan}/>
-            <Link to=".">Summary</Link>
-            <Link to="wars">Wars</Link>
+            <Tabs tabs={[
+                {to: ".", label: "Summary"},
+                {to: "wars", label: "Wars"}
+            ]}>
+                {/*<NavLink to=".">Summary</NavLink>*/}
+                {/*<NavLink to="wars">Wars</NavLink>*/}
+            </Tabs>
             <div className={styles["table-wrapper"]}>
                 <Outlet context={{clanData}}/>
             </div>
