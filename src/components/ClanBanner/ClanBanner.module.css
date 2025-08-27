@@ -1,13 +1,18 @@
 .banner {
     display: flex;
-    border: 2px solid var(--primary);
+    /*border: 2px solid var(--primary);*/
+    border: 2px solid #292929;
     box-shadow: 0 0 20px rgba(0, 0, 0, 0.20);
     border-radius: 16px;
     width: 80%;
-    transition: box-shadow 0.3s;
+    transition: box-shadow 0.3s, border 0.2s;
+    padding: 1rem;
+    background-image: linear-gradient(to bottom, var(--background), #1c1c1c);
+    /*background-size: cover;*/
 }
 
 .banner:hover {
+    border: 2px solid var(--primary);
     box-shadow: 0 0 30px rgba(106, 63, 192, 0.7);
 }
 

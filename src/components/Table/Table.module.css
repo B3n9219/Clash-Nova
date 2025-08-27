@@ -1,7 +1,7 @@
 .table {
     --table-bg: #121212;
     --alternate-row: #1A1A1A;
-    --border: var(--dark)
+    --border: var(--dark);
 }
 
 .table {
@@ -9,6 +9,9 @@
     margin: 0;
     font-size: 0.9rem;
     /* change min-width */
+    overflow: hidden;
+    width: max-content;
+    max-width: 100%;
     min-width: 400px;
     box-shadow: 0 0 20px rgba(0, 0, 0, 0.20);
     background-color: var(--table-bg);
