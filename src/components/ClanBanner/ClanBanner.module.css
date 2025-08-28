@@ -12,6 +12,13 @@
     /*background-size: cover;*/
 }
 
+@media (max-width: 768px) {
+    .banner {
+        flex-direction: column;
+        align-items: center;
+    }
+}
+
 .banner:hover {
     border: 2px solid var(--primary);
     box-shadow: 0 0 30px rgba(106, 63, 192, 0.7);
