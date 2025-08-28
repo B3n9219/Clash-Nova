@@ -13,7 +13,11 @@ function Table({ data, columns }) {
     const [activeFilters, setActiveFilters] = useState({})
 
     function getValue(item, key, parentKey = null) {
-        return parentKey ? item[parentKey]?.[key] : item[key];
+        const raw = parentKey ? item[parentKey]?.[key] : item[key];
+        if (typeof raw === "boolean") {
+            return raw? "✅" : "❌"
+        }
+        return raw
     }
 
     function hasActiveFilters(columnId) {
