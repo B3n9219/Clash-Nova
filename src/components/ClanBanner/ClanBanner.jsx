@@ -15,7 +15,7 @@ function ClanBanner({ info }) {
                             <p>{info.playerCount}</p>
                         </div>
                     </div>
-                    <p>Description: {info.description}</p>
+                    <p>{info.description}</p>
                 </div>
             </section>
         )

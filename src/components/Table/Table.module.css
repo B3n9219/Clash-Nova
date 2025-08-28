@@ -1,7 +1,8 @@
 .table {
     --table-bg: #121212;
     --alternate-row: #1A1A1A;
-    --border: var(--dark);
+    /*--border: var(--dark);*/
+    --border: #4B3FA7;
 }
 
 .table {

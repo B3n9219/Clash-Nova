@@ -1,6 +1,6 @@
 import {useEffect, useState} from "react";
-import SortButton from "../SortButton/SortButton.jsx";
-import FilterButton from "../FilterButton/FilterButton.jsx";
+import SortButton from "../tableButtons/SortButton/SortButton.jsx";
+import FilterButton from "../tableButtons/FilterButton/FilterButton.jsx";
 import FilterModal from "../FilterModal/FilterModal.jsx";
 
 import styles from "./Table.module.css"
@@ -13,6 +13,14 @@ function Table({ data, columns }) {
     const [activeFilters, setActiveFilters] = useState({})
 
     function getValue(item, key, parentKey = null) {
+        const raw = parentKey ? item[parentKey]?.[key] : item[key];
+        if (typeof raw === "boolean") {
+            return raw? "✅" : "❌"
+        }
+        return raw
+    }
+
+    function getDisplayValue(item, key, parentKey = null) {
         const raw = parentKey ? item[parentKey]?.[key] : item[key];
         if (typeof raw === "boolean") {
             return raw? "✅" : "❌"
