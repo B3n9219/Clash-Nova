@@ -49,7 +49,7 @@ function Clan() {
                 {to: "wars", label: "Wars"}
             ]}>
             </Tabs>
-            <div className={styles["table-wrapper"]}>
+            <div className={styles["table-scroll"]}>
                 <Outlet context={{clanData}}/>
             </div>
         </div>

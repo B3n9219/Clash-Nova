@@ -10,7 +10,6 @@
     margin: 0;
     font-size: 0.9rem;
     /* change min-width */
-    overflow: hidden;
     width: max-content;
     max-width: 100%;
     min-width: 400px;
@@ -19,15 +18,19 @@
 }
 
 
-.table thead tr {
+.table thead th {
     top: 0;
     position: sticky;
-    z-index: 2;
+    z-index: 10;
+    background-color: var(--primary);
+
 }
 
 
-.table thead tr:last-child {
-    top: 42px;
+.table thead tr:nth-child(2) th {
+    top:  42px; /* use a variable instead of magic number */
+    background: #2E0F6C;
+    z-index: 11;
 }
 
 
