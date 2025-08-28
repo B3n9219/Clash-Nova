@@ -13,5 +13,25 @@
     overflow-y: auto;
     overflow-x: auto;
     width: 100%;
+    background-color: var(--table-bg);
+    position: relative;
 }
 
+.table-mask {
+    position: sticky;
+    top: 0;
+    height: 0;                /* remove layout shift */
+    pointer-events: none;
+    z-index: 9;                /* below header (10/11) */
+}
+
+/* Actual overlay - using so the mask doesnt take up the space shifting the table down. */
+.table-mask::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 84px; /* Height of header rows*/
+    background: var(--background);
+}

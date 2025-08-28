@@ -6,7 +6,9 @@ function ClanBanner({ info }) {
     return (
         info && (
             <section className={styles.banner}>
-                <img src={info.badge} alt={"clan badge"}/>
+                <div className={styles["badge-container"]}>
+                    <img src={info.badge} alt={"clan badge"}/>
+                </div>
                 <div className={styles.info}>
                     <div className={styles.title}>
                         <h2>{info.name}</h2>

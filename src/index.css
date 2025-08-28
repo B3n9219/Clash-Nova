@@ -1,4 +1,11 @@
 :root {
+    --space-xxs: 4px;
+    --space-xs: 8px;
+    --space-sm: 12px;
+    --space-md: 16px;
+    --space-lg: 24px;
+    --space-xl: 32px;
+    --space-xxl: 48px;
     --primary: #590CC9;
     --secondary: #6A3FC0;
     --dark: #250388;

@@ -8,6 +8,7 @@
     transition: box-shadow 0.3s, border 0.2s;
     padding: 1rem;
     background-image: linear-gradient(to bottom, var(--background), #1c1c1c);
+    gap: var(--space-md)
     /*background-size: cover;*/
 }
 
@@ -16,15 +17,31 @@
     box-shadow: 0 0 30px rgba(106, 63, 192, 0.7);
 }
 
+.banner .badge-container {
+    height: 160px;
+    width: 160px;
+}
+
+.badge-container img {
+    height: 100%;
+    width: auto;
+    object-fit: contain;
+}
+
 .banner .info {
     display: flex;
     flex-direction: column;
+    gap: var(--space-lg)
+}
+
+.banner .info > * {
+    margin: 0;
 }
 
 .banner .info .title {
     display: flex;
     align-items: center;
-    gap: 1rem;
+    gap: var(--space-md);
 }
 
 .banner .info {

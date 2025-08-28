@@ -50,6 +50,7 @@ function Clan() {
             ]}>
             </Tabs>
             <div className={styles["table-scroll"]}>
+                <div className={styles["table-mask"]}></div>
                 <Outlet context={{clanData}}/>
             </div>
         </div>
