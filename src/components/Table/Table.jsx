@@ -12,15 +12,8 @@ function Table({ data, columns }) {
     const [openFilter, setOpenFilter] = useState(null)
     const [activeFilters, setActiveFilters] = useState({})
 
+    // Possibly abstract this into getValue and getDisplayValue
     function getValue(item, key, parentKey = null) {
-        const raw = parentKey ? item[parentKey]?.[key] : item[key];
-        if (typeof raw === "boolean") {
-            return raw? "✅" : "❌"
-        }
-        return raw
-    }
-
-    function getDisplayValue(item, key, parentKey = null) {
         const raw = parentKey ? item[parentKey]?.[key] : item[key];
         if (typeof raw === "boolean") {
             return raw? "✅" : "❌"
