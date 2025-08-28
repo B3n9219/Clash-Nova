@@ -55,9 +55,18 @@ function Table({ data, columns }) {
                 const aVal = getValue(a, sortConfig.key, sortConfig.parentKey);
                 const bVal = getValue(b, sortConfig.key, sortConfig.parentKey);
 
+                const aEmpty = aVal === undefined || aVal === null || aVal === "";
+                const bEmpty = bVal === undefined || bVal === null || bVal === "";
+
+                // Always push empty cells to the bottom
+                if (aEmpty && !bEmpty) return 1;
+                if (!aEmpty && bEmpty) return -1;
+                if (aEmpty && bEmpty) return 0;
+
                 if (typeof aVal === "number" && typeof bVal === "number") {
                     return sortConfig.direction === "asc" ? aVal - bVal : bVal - aVal;
                 }
+
                 return sortConfig.direction === "asc"
                     ? String(aVal).localeCompare(String(bVal))
                     : String(bVal).localeCompare(String(aVal));
