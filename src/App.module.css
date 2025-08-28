@@ -8,14 +8,6 @@
     /*background-position: center;*/
 }
 
-.main {
-    flex: 1;                /* fill remaining space */
-    display: flex;
-    flex-direction: column; /* stack banner + tabs + table-wrapper vertically */
-    overflow: hidden;       /* prevent spilling */
-    padding: 2rem;
-}
-
 
 nav {
     height: 56px;

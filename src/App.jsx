@@ -12,9 +12,7 @@ function App() {
                 <img src={logo} alt="Clash Nova Logo"/>
                 <h2>Clash Nova</h2>
             </nav>
-            <div className={styles.main}>
-                <Outlet />
-            </div>
+            <Outlet />
         </div>
 )
 }
