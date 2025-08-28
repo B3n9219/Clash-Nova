@@ -6,11 +6,6 @@ import logo from "./assets/logo-nobg.png";
 
 
 function App() {
-    if (import.meta.env.MODE === "production") {
-        console.log("Running in production");
-    } else {
-        console.log("Running in development");
-    }
     return (
         <div className={styles.app}>
             <nav>

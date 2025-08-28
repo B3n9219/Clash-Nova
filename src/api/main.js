@@ -1,6 +1,11 @@
-// Using this url for testing - use VM when in production
-const baseRequest = "http://127.0.0.1:8000"
-//const baseRequest = "/api"
+let baseRequest
+if (import.meta.env.MODE === "production") {
+    console.log("Running in production");
+    baseRequest = "/api"
+} else {
+    baseRequest = "http://127.0.0.1:8000"
+}
+
 
 async function getInfo(url) {
     const response = await fetch(url)
