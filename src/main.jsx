@@ -8,6 +8,7 @@ import Clan from "./pages/Clan.jsx"
 
 import Summary from "./pages/Summary.jsx";
 import Wars from "./pages/Wars.jsx";
+import Raids from "./pages/Raids.jsx"
 
 // font awesome setup
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
@@ -42,6 +43,10 @@ const router = createBrowserRouter([
                         path: "wars",
                         element: <Wars />,
                     },
+                    {
+                        path: "raids",
+                        element: <Raids />
+                    }
                 ]
             }
         ]

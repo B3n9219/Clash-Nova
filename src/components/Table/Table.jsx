@@ -7,6 +7,7 @@ import styles from "./Table.module.css"
 
 
 function Table({ data, columns }) {
+    console.log("DATA", data)
     const [displayData, setDisplayData] = useState(data)
     const [sortConfig, setSortConfig] = useState({key: null, parentKey: null, direction: null})
     const [openFilter, setOpenFilter] = useState(null)

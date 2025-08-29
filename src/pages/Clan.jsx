@@ -1,7 +1,7 @@
 import {useParams} from "react-router-dom";
 import {useEffect, useState} from "react";
 
-import { getClanInfo, getClanSummaryInfo, getClanWarInfo } from "../api/main.js";
+import { getClanInfo, getClanSummaryInfo, getClanWarInfo, getClanRaidInfo } from "../api/main.js";
 import ClanBanner from "../components/ClanBanner/ClanBanner.jsx";
 
 import styles from "./Clan.module.css"
@@ -16,19 +16,31 @@ function Clan() {
     const [clanData, setClanData] = useState({
         clan: null,
         summary: null,
-        war: null
+        wars: null,
+        raid: null,
     })
     const [loading, setLoading] = useState(true)
     const [error, setError] = useState(null)
     useEffect(() => {
+        async function loadBanner() {
+            try {
+                const info = await getClanInfo(tag)
+                setClanData({...clanData, clan: info})
+            } catch {
+                // Clan not in database
+
+            }
+        }
         async function fetchClanData() {
             try {
-                const [basicInfo, summaryData, warData] = await Promise.all([
+                const [basicInfo, summaryData, warData, raidData] = await Promise.all([
                     getClanInfo(tag),
                     getClanSummaryInfo(tag),
-                    getClanWarInfo(tag)
+                    getClanWarInfo(tag),
+                    getClanRaidInfo(tag)
                 ]);
-                setClanData({ ...clanData, clan: {...basicInfo, playerCount: summaryData.length}, summary: summaryData, war: warData });
+                setClanData({ ...clanData, clan: {...basicInfo, playerCount: summaryData.length},
+                    summary: summaryData, wars: warData, raids: raidData});
                 setError(null)
             } catch (error) {
                 setError(error.message)
@@ -46,7 +58,8 @@ function Clan() {
             <ClanBanner info={clanData.clan}/>
             <Tabs tabs={[
                 {to: ".", label: "Summary"},
-                {to: "wars", label: "Wars"}
+                {to: "wars", label: "Wars"},
+                {to: "raids", label: "Raids"},
             ]}>
             </Tabs>
             <div className={styles["table-scroll"]}>

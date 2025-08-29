@@ -6,6 +6,25 @@ if (import.meta.env.MODE === "production") {
     baseRequest = "http://127.0.0.1:8000"
 }
 
+async function addClan(tag) {
+    const encodedTag = encodeURIComponent(tag);
+    try {
+        await fetch(`${baseRequest}/clan/${encodedTag}`, {method: "POST"})
+    } catch (e) {
+        throw new Error(e)
+    }
+}
+
+
+async function refreshClanData(tag) {
+    const encodedTag = encodeURIComponent(tag);
+    try {
+        await fetch(`${baseRequest}/clan/${encodedTag}/refresh`, {method: "POST"})
+    } catch (e) {
+        throw new Error(e)
+    }
+}
+
 
 async function getInfo(url) {
     const response = await fetch(url)
@@ -34,6 +53,12 @@ async function getClanWarInfo(tag) {
 }
 
 
+async function getClanRaidInfo(tag) {
+    const encodedTag = encodeURIComponent(tag);
+    return await getInfo(`${baseRequest}/clan/${encodedTag}/players/raids`)
+}
+
+
 // console.log(await getClanWarInfo('#28P220JCV'))
 
-export { getClanInfo, getClanSummaryInfo, getClanWarInfo }
+export { addClan, refreshClanData, getClanInfo, getClanSummaryInfo, getClanWarInfo, getClanRaidInfo }

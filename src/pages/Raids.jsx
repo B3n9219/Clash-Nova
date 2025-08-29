@@ -1,5 +1,5 @@
 import Table from "../components/Table/Table.jsx";
-import getWarColumns from "../columns/warTable.js";
+import getRaidColumns from "../columns/raidsTable.js";
 import { getUniqueDates } from "../utilities/filtering.js";
 
 import { useOutletContext } from "react-router-dom";
@@ -8,7 +8,7 @@ import { useOutletContext } from "react-router-dom";
 function Wars() {
     const { clanData } = useOutletContext()
     return (
-        <Table data={clanData.wars} columns={getWarColumns(getUniqueDates(clanData.wars))}/>
+        <Table data={clanData.raids} columns={getRaidColumns(getUniqueDates(clanData.raids))}/>
     )
 }
 
