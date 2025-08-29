@@ -9,9 +9,13 @@ if (import.meta.env.MODE === "production") {
 async function addClan(tag) {
     const encodedTag = encodeURIComponent(tag);
     try {
-        await fetch(`${baseRequest}/clan/${encodedTag}`, {method: "POST"})
+        const response = await fetch(`${baseRequest}/clan/${encodedTag}`, { method: "POST" });
+        if (!response.ok) {
+            throw new Error(`Failed to add clan: ${response.status}`);
+        }
+        return await response.json(); // if your API returns JSON
     } catch (e) {
-        throw new Error(e)
+        throw e
     }
 }
 
