@@ -1,9 +1,7 @@
-let baseRequest
+let baseRequest = "http://127.0.0.1:8000"
 if (import.meta.env.MODE === "production") {
     console.log("Running in production");
     baseRequest = "/api"
-} else {
-    baseRequest = "http://127.0.0.1:8000"
 }
 
 async function addClan(tag) {
@@ -32,6 +30,7 @@ async function refreshClanData(tag) {
 
 async function getInfo(url) {
     const response = await fetch(url)
+    if (response.status === 404) return null;  // not found -> special case
     if (!response.ok) {
         throw new Error(`HTTP error: Status ${response.status}`);
     }
