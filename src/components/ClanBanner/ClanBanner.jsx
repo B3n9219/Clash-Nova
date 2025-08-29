@@ -14,7 +14,7 @@ function ClanBanner({ info }) {
                         <h2>{info.name}</h2>
                         <div className={styles.players}>
                             <FontAwesomeIcon icon="fa-solid fa-users"/>
-                            <p>{info.playerCount}</p>
+                            <p>{info.playerCount? info.playerCount: "-"}</p>
                         </div>
                     </div>
                     <p>{info.description}</p>

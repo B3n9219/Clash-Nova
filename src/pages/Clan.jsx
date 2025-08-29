@@ -3,6 +3,7 @@ import {useEffect, useState, useRef} from "react";
 
 import { addClan, refreshClanData, getClanInfo, getClanSummaryInfo, getClanWarInfo, getClanRaidInfo } from "../api/main.js";
 import ClanBanner from "../components/ClanBanner/ClanBanner.jsx";
+import LoadingSpinner from "../components/LoadingSpinner/LoadingSpinner.jsx";
 
 import styles from "./Clan.module.css"
 
@@ -20,6 +21,7 @@ function Clan() {
         raid: null,
     })
     const [loading, setLoading] = useState(true)
+    const [loadingMessage, setLoadingMessage] = useState(null)
     const [error, setError] = useState(null)
     const hasFetched = useRef(false);
     useEffect(() => {
@@ -30,28 +32,28 @@ function Clan() {
             setError(null)
             try {
                 console.log("GETTING CLAN 1")
+                setLoadingMessage("Retrieving Clan")
                 let clan = await getClanInfo(tag)
                 if (!clan) {
                     console.log("ADDING CLAN")
+                    setLoadingMessage("Adding new clan")
                     await addClan(tag)
+                    setLoadingMessage("Fetching clan data")
                     console.log("REFRESHING CLAN")
                     await refreshClanData(tag)
                     console.log("GETTING CLAN 2")
                     clan = await getClanInfo(tag)
                 }
-
+                setClanData(prev => ({ ...prev, clan: clan }))
+                setLoadingMessage("Fetching clan data")
                 const [summary, wars, raids] = await Promise.all([
                     getClanSummaryInfo(tag),
                     getClanWarInfo(tag),
                     getClanRaidInfo(tag)
                 ])
-
-                setClanData({
-                    clan: { ...clan, playerCount: summary.length },
-                    summary,
-                    wars,
-                    raids
-                })
+                setClanData(prev => ({
+                    ...prev, clan: { ...clan, playerCount: summary.length }, summary, wars,  raids
+                }))
             } catch (err) {
                 setError(err.message || "Clan doesn't exist")
                 setClanData({ clan: null, summary: null, wars: null, raids: null })
@@ -61,21 +63,33 @@ function Clan() {
         }
         fetchAllData()
     }, [tag])
-    if (loading) return <p>Loading...</p>
+
     if (error) return <p>{error}</p>
     return (
         <div className={styles.clan}>
+            {clanData.clan &&
             <ClanBanner info={clanData.clan}/>
-            <Tabs tabs={[
-                {to: ".", label: "Summary"},
-                {to: "wars", label: "Wars"},
-                {to: "raids", label: "Raids"},
-            ]}>
-            </Tabs>
-            <div className={styles["table-scroll"]}>
-                <div className={styles["table-mask"]}></div>
-                <Outlet context={{clanData}}/>
-            </div>
+            }
+            {loading && (
+                <div className={styles.loading}>
+                    <LoadingSpinner/>
+                    <p>{loadingMessage ? `${loadingMessage}...` : "Loading..."}</p>
+                </div>
+            )}
+            {!loading &&
+                <>
+                    <Tabs tabs={[
+                        {to: ".", label: "Summary"},
+                        {to: "wars", label: "Wars"},
+                    {to: "raids", label: "Raids"},
+                ]}>
+                </Tabs>
+                <div className={styles["table-scroll"]}>
+                    <div className={styles["table-mask"]}></div>
+                    <Outlet context={{clanData}}/>
+                </div>
+            </>
+            }
         </div>
     )
 }
