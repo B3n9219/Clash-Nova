@@ -1,5 +1,22 @@
 .home {
+    height: 100%;
     display: flex;
-    justify-content: center;
+    flex-direction: column;
     align-items: center;
+}
+
+.background {
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+}
+
+.spacer {
+    flex: 0 0 30%
+}
+
+.search-wrapper {
+    width: 20%;
+    min-width: 300px;
 }

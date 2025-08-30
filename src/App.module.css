@@ -16,7 +16,20 @@ nav {
     padding: 0.3rem 6rem;
     display: flex;
     align-items: center;
+}
+
+nav a {
+    height: 100%;
+    display: flex;
+    align-items: center;
     gap: var(--space-xs);
+    text-decoration: none;
+}
+
+a:visited,
+a:focus,
+a:active {
+    color: inherit;
 }
 
 nav img {

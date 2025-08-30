@@ -1,4 +1,4 @@
-import {useParams} from "react-router-dom";
+import {Link, useParams} from "react-router-dom";
 import {useEffect, useState, useRef} from "react";
 
 import { addClan, refreshClanData, getClanInfo, getClanSummaryInfo, getClanWarInfo, getClanRaidInfo } from "../api/main.js";
@@ -35,14 +35,20 @@ function Clan() {
                 setLoadingMessage("Retrieving Clan")
                 let clan = await getClanInfo(tag)
                 if (!clan) {
-                    console.log("ADDING CLAN")
-                    setLoadingMessage("Adding new clan")
-                    await addClan(tag)
-                    setLoadingMessage("Fetching clan data")
-                    console.log("REFRESHING CLAN")
-                    await refreshClanData(tag)
-                    console.log("GETTING CLAN 2")
-                    clan = await getClanInfo(tag)
+                    try {
+                        console.log("ADDING CLAN")
+                        setLoadingMessage("Adding new clan")
+                        await addClan(tag)
+                        setLoadingMessage("Fetching clan data")
+                        console.log("REFRESHING CLAN")
+                        await refreshClanData(tag)
+                        console.log("GETTING CLAN 2")
+                        clan = await getClanInfo(tag)
+                    } catch {
+                        setError("Clan does not exist")
+                        return
+                    }
+
                 }
                 setClanData(prev => ({ ...prev, clan: clan }))
                 setLoadingMessage("Fetching clan data")
@@ -55,7 +61,7 @@ function Clan() {
                     ...prev, clan: { ...clan, playerCount: summary.length }, summary, wars,  raids
                 }))
             } catch (err) {
-                setError(err.message || "Clan doesn't exist")
+                setError(err.message)
                 setClanData({ clan: null, summary: null, wars: null, raids: null })
             } finally {
                 setLoading(false)
@@ -64,7 +70,12 @@ function Clan() {
         fetchAllData()
     }, [tag])
 
-    if (error) return <p>{error}</p>
+    if (error) return (
+        <section className={styles.error}>
+            <h2>Error: {error}</h2>
+            <Link to={"/"}>Back to home</Link>
+        </section>
+    )
     return (
         <div className={styles.clan}>
             {clanData.clan &&

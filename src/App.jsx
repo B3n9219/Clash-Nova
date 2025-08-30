@@ -1,4 +1,4 @@
-import { Outlet } from "react-router-dom";
+import {Link, Outlet} from "react-router-dom";
 
 import styles from './App.module.css'
 
@@ -9,12 +9,14 @@ function App() {
     return (
         <div className={styles.app}>
             <nav>
-                <img src={logo} alt="Clash Nova Logo"/>
-                <h2>Clash Nova</h2>
+                <Link to={"/"}>
+                    <img src={logo} alt="Clash Nova Logo"/>
+                    <h2>Clash Nova</h2>
+                </Link>
             </nav>
-            <Outlet />
+            <Outlet/>
         </div>
-)
+    )
 }
 
 export default App
