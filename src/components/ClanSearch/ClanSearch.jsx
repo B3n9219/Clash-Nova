@@ -14,7 +14,7 @@ function ClanSearch() {
     }
     return (
         <form onSubmit={handleSubmit} className={styles["search-bar"]}>
-            <input type="search" placeholder="Search for a clan..." value={searchValue} onChange={(e) => setSearchValue(e.target.value)}/>
+            <input type="search" placeholder="Search for a clan tag..." value={searchValue} onChange={(e) => setSearchValue(e.target.value)}/>
             <button type="submit">Go</button>
         </form>
     )
