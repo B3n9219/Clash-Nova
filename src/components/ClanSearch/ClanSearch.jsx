@@ -10,7 +10,7 @@ function ClanSearch() {
     const navigate = useNavigate()
     function handleSubmit(e) {
         e.preventDefault()
-        navigate(`/clans/${removeHashFromTag(searchValue)}`)
+        navigate(`/clans/${removeHashFromTag(searchValue).toUpperCase()}`)
     }
     return (
         <form onSubmit={handleSubmit} className={styles["search-bar"]}>
