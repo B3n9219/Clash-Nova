@@ -88,10 +88,10 @@ function Clan() {
                 </div>
             )}
             {!loading &&
-                <>
-                    <Tabs tabs={[
-                        {to: ".", label: "Summary"},
-                        {to: "wars", label: "Wars"},
+            <>
+                <Tabs tabs={[
+                    {to: ".", label: "Summary"},
+                    {to: "wars", label: "Wars"},
                     {to: "raids", label: "Raids"},
                 ]}>
                 </Tabs>

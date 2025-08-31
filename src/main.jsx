@@ -5,6 +5,8 @@ import './index.css'
 import App from './App.jsx'
 import Home from "./pages/Home.jsx";
 import Clan from "./pages/Clan.jsx"
+import ErrorPage from "./pages/ErrorPage.jsx"
+
 
 import Summary from "./pages/Summary.jsx";
 import Wars from "./pages/Wars.jsx";
@@ -26,6 +28,7 @@ const router = createBrowserRouter([
     {
         path: "/",
         element: <App />,
+        errorElement: <ErrorPage/>,
         children: [
             {
                 index: true,
