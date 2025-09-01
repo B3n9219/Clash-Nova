@@ -3,4 +3,17 @@ function removeHashFromTag(tag) {
     return tag.startsWith('#') ? tag.slice(1) : tag;
 }
 
-export { removeHashFromTag }
+function removeOs(tag) {
+    let newTag = ""
+    for (let letter of tag) {
+        if (letter === "O" || letter === "o") {
+            newTag += 0
+        }
+        else {
+            newTag += letter
+        }
+    }
+    return newTag
+}
+
+export { removeHashFromTag, removeOs }

@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { useNavigate } from "react-router-dom";
 
-import { removeHashFromTag } from "../../utilities/formatting.js";
+import { removeHashFromTag, removeOs } from "../../utilities/formatting.js";
 
 import styles from "./ClanSearch.module.css"
 
@@ -10,7 +10,9 @@ function ClanSearch() {
     const navigate = useNavigate()
     function handleSubmit(e) {
         e.preventDefault()
-        navigate(`/clans/${removeHashFromTag(searchValue).toUpperCase()}`)
+        let formatted = removeHashFromTag(searchValue)
+        formatted = removeOs(formatted.toUpperCase())
+        navigate(`/clans/${formatted}`)
     }
     return (
         <form onSubmit={handleSubmit} className={styles["search-bar"]}>
